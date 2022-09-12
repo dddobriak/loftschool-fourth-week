@@ -7,23 +7,13 @@ use PDOException;
 class Auth
 {
     /**
-     * Init db instance
-     *
-     * @return DbConnect
-     */
-    public static function db()
-    {
-        return DbConnect::getInstance();
-    }
-
-    /**
      * Check if user exists by email
      *
      * @param array $user
      * @return mixed
      * @throws PDOException
      */
-    public static function check($user)
+    public static function check($user): mixed
     {
         return User::getByEmail($user['email']) ?? false;
     }
@@ -35,7 +25,7 @@ class Auth
      * @return true|void
      * @throws PDOException
      */
-    public static function loginUser($user)
+    public static function loginUser($user): bool
     {
         $user['password'] = sha1($user['password']);
 
@@ -50,14 +40,14 @@ class Auth
      * Create new user
      *
      * @param array $user
-     * @return true|void
+     * @return mixed
      * @throws PDOException
      */
-    public static function createUser($user)
+    public static function createUser($user): mixed
     {
         if ($user['name'] && $user['email'] && $user['password']) {
             $user['password'] = sha1($user['password']);
-            User::create($user);
+            (new User($user))->create();
             setAuthSession($user['email']);
 
             return true;

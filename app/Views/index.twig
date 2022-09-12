@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="https://cdn.tailwindcss.com"></script>
+            <title>{% block title %}{% endblock %} - Twig</title>
+        {% endblock %}
+    </head>
+    <body class="p-5">
+    {% if message %}
+        <div class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold bg-blue-600 text-white">
+            {{ message }}
+        </div>
+    {% endif %}
+        <div>
+        {% block content %}
+            <form action="addpost" method="POST" class="mb-3">
+                <div>
+                    <p>
+                        <label for="form-title">Title</label><br>
+                        <input class="rounded-md shadow-sm py-1.5 pl-2 pr-3 mb-2 ring-1 ring-slate-900/10" id="form-title" name="title" type="text">
+                    </p>
+                    <p>
+                        <label for="form-text">Text</label><br>
+                        <textarea class="rounded-md shadow-sm py-1.5 pl-2 pr-3 mb-2 ring-1 ring-slate-900/10" id="form-text" name="text" id="" cols="30" rows="5"></textarea>
+                    </p>
+                    <button class="rounded-md shadow-sm py-1.5 pl-2 pr-3 ring-1 ring-slate-900/10" type="submit">Send post</button>
+                </div>
+            </form>
+            {% for post in posts %}
+            <div class="my-2">
+                <h3 class="text-xl font-semibold">{{ post.title }}</h3>
+                <p class="mb-2">{{ post.text }}</p>
+                {% if isAdmin %}
+                    <form action="deletepost" method="POST">
+                    <button class="rounded-md shadow-sm py-1.5 pl-2 pr-3 mb-2 ring-1 ring-slate-900/10" name="post" value="{{ post.id }}">Delete</button></form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% endblock %}
+        </div>
+        <div>
+            {% block footer %}
+                &copy; Копирайтик {{ "now"|date("d-m-Y") }}.
+            {% endblock %}
+        </div>
+    </body>
+</html>

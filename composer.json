@@ -5,7 +5,9 @@
     "require": {
         "bramus/router": "^1.6",
         "ext-pdo": "*",
-        "swiftmailer/swiftmailer": "^6.0"
+        "swiftmailer/swiftmailer": "^6.0",
+        "twig/twig": "^3.0",
+        "intervention/image": "^2.7"
     },
     "autoload": {
         "psr-4": {"App\\": "app/"}

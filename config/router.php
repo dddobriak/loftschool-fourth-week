@@ -19,6 +19,12 @@ $router->get('/api', 'App\Controllers\BlogController@api');
 $router->get('/createtables', 'App\Controllers\MigrateController@create');
 $router->get('/removetables', 'App\Controllers\MigrateController@remove');
 
+// Send Email
+$router->get('/sendemail', 'App\Services\SwiftMail@send');
+
+// Edit image
+$router->get('/convertimage', 'App\Services\ImageTask@convert');
+
 // Define 404
 $router->set404(function () {
     header('HTTP/1.1 404 Not Found');

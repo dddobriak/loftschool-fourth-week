@@ -41,7 +41,7 @@ class BlogController
             return header('Location: /');
         }
 
-        Post::create($_POST);
+        (new Post($_POST))->create();
 
         return header('Location: /');
     }

@@ -2,29 +2,30 @@
 
 namespace App\Models;
 
+use App\Traits\DB;
 use PDO;
 use PDOException;
 
 class User
 {
-    /**
-     * Init db instance
-     *
-     * @return DbConnect
-     */
-    public static function db()
+    use DB;
+
+    private $user;
+
+    public function __construct($user)
     {
-        return DbConnect::getInstance();
+        $this->user['name'] = $user['name'];
+        $this->user['email'] = $user['email'];
+        $this->user['password'] = $user['password'];
     }
 
     /**
      * Create new user
      *
-     * @param array $user
      * @return void
      * @throws PDOException
      */
-    public static function create($user)
+    public function create(): void
     {
         $prepare = self::db()->dbh()
             ->prepare("
@@ -32,21 +33,21 @@ class User
                 values (:name, :email, :password)
             ");
 
-        $prepare->execute($user);
+        $prepare->execute($this->user);
         $insertId = self::db()->dbh()->lastInsertId();
         $userData = implode(' ', self::getById($insertId));
 
-        return setMessage("user: {$userData} created");
+        setMessage("user: {$userData} created");
     }
 
     /**
      * Get user by user id
      *
      * @param int $id
-     * @return mixed
+     * @return array|false
      * @throws PDOException
      */
-    public static function getById($id)
+    public static function getById($id): array|false
     {
         $prepare = self::db()->dbh()
             ->prepare("select * from users where id = ?");
@@ -59,10 +60,10 @@ class User
      * Get user by user email
      *
      * @param string $email
-     * @return mixed
+     * @return array|false
      * @throws PDOException
      */
-    public static function getByEmail($email)
+    public static function getByEmail($email): array|false
     {
         $prepare = self::db()->dbh()
             ->prepare("select * from users where email = ?");
@@ -78,7 +79,7 @@ class User
      * @return void
      * @throws PDOException
      */
-    public static function delete($id)
+    public static function delete($id): void
     {
         $userData = self::getById($id) ? $id : 'not found';
 
@@ -86,17 +87,16 @@ class User
             ->prepare("delete from users where id = ?");
         $prepare->execute([$id]);
 
-        return setMessage("user {$userData} deleted");
+        setMessage("user {$userData} deleted");
     }
 
     /**
      * Select user by user email and user password
      *
-     * @param array $user
-     * @return mixed
+     * @return array|false
      * @throws PDOException
      */
-    public static function canLogin($user)
+    public static function canLogin($user): array|false
     {
         $prepare = self::db()->dbh()
             ->prepare("select * from users where email = :email and password = :password");
@@ -108,10 +108,10 @@ class User
     /**
      * Check if user has admin role
      *
-     * @return mixed
+     * @return int|null
      * @throws PDOException
      */
-    public static function isAdmin()
+    public static function isAdmin(): int|null
     {
         $prepare = self::db()->dbh()
             ->prepare("select * from users where email = ? and is_admin = 1");

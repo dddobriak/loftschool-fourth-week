@@ -8,22 +8,26 @@ use PDO;
 class DbConnect
 {
     private static $instance = null;
-    private $dbh;
+    private $db;
 
     private function __construct()
     {
-        $db = require_once ROOT . '/config/database.php';
+        $config = require_once ROOT . '/config/database.php';
 
         try {
-            $this->dbh = new PDO("mysql:host={$db['host']};dbname={$db['dbname']}", $db['user'], $db['password']);
-        } catch (Exception $e) {
+            $this->db = new \PDO(
+                "mysql:host={$config['host']};dbname={$config['dbname']}",
+                $config['user'],
+                $config['password']
+            );
+        } catch (\Exception $e) {
             die($e);
         }
     }
 
     public function dbh()
     {
-        return $this->dbh;
+        return $this->db;
     }
 
     public static function getInstance()

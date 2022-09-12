@@ -1,0 +1,32 @@
+{% extends "index.twig" %}
+
+{% block title %}Auth{% endblock %}
+
+{% block content %}
+<div class="my-2">
+    <h2 class="mb-2">Login</h2>
+    <form action="login" method="POST">
+        <div>
+            <label for="login_email">Email</label>
+            <input class="rounded-md shadow-sm py-1.5 pl-2 pr-3 mx-2 ring-1 ring-slate-900/10" id="login_email" name="email" type="text">
+            <label for="login_password">Password</label>
+            <input class="rounded-md shadow-sm py-1.5 pl-2 pr-3 mx-2 ring-1 ring-slate-900/10" id="login_password" name="password" type="text">
+            <button class="rounded-md shadow-sm py-1.5 pl-2 pr-3 ring-1 ring-slate-900/10" type="submit">Go</button>
+        </div>
+    </form>
+</div>
+<div class="my-2">
+    <h2 class="mb-2">Register</h2>
+    <form action="register" method="POST">
+        <div>
+            <label for="register_name">Name</label>
+            <input class="rounded-md shadow-sm py-1.5 pl-2 pr-3 mx-2 ring-1 ring-slate-900/10" id="register_name" name="name" type="text">
+            <label for="register_email">Email</label>
+            <input class="rounded-md shadow-sm py-1.5 pl-2 pr-3 mx-2 ring-1 ring-slate-900/10" id="register_email" name="email" type="text">
+            <label for="register_password">Password</label>
+            <input class="rounded-md shadow-sm py-1.5 pl-2 pr-3 mx-2 ring-1 ring-slate-900/10" id="register_password" name="password" type="text">
+            <button class="rounded-md shadow-sm py-1.5 pl-2 pr-3 ring-1 ring-slate-900/10" type="submit">Go</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

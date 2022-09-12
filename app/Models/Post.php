@@ -2,19 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\DB;
 use PDO;
 use PDOException;
 
 class Post
 {
-    /**
-     * Init db instance
-     *
-     * @return DbConnect
-     */
-    public static function db()
+    use DB;
+
+    private $post;
+
+    public function __construct($post)
     {
-        return DbConnect::getInstance();
+        $this->post['title'] = $post['title'];
+        $this->post['text'] = $post['text'];
+        $this->post['user_id'] = Auth::check($_SESSION)['id'];
     }
 
     /**
@@ -24,7 +26,7 @@ class Post
      * @return void
      * @throws PDOException
      */
-    public static function create($post)
+    public function create(): void
     {
         $prepare = self::db()->dbh()
             ->prepare("
@@ -32,11 +34,10 @@ class Post
                 values (:title, :text, :user_id)
             ");
 
-        $post['user_id'] = Auth::check($_SESSION)['id'];
-        $prepare->execute($post);
+        $prepare->execute($this->post);
         $insertId = self::db()->dbh()->lastInsertId();
 
-        return setMessage("post: {$insertId} created");
+        setMessage("post: {$insertId} created");
     }
 
     /**
@@ -44,7 +45,7 @@ class Post
      *
      * @return array|false
      */
-    public static function read()
+    public static function read(): array|false
     {
         $query = self::db()->dbh()
             ->query("select * from posts");
@@ -59,14 +60,14 @@ class Post
      * @return void
      * @throws PDOException
      */
-    public static function delete($id)
+    public static function delete($id): void
     {
         $postData = self::getById($id) ? $id : 'not found';
         $prepare = self::db()->dbh()
             ->prepare("delete from posts where id = ?");
         $prepare->execute([$id]);
 
-        return setMessage("post {$postData} deleted");
+        setMessage("post {$postData} deleted");
     }
 
     /**
@@ -76,7 +77,7 @@ class Post
      * @return array|false
      * @throws PDOException
      */
-    public static function getById($id)
+    public static function getById($id): array|false
     {
         $prepare = self::db()->dbh()
             ->prepare("select * from posts where id = ?");
@@ -92,7 +93,7 @@ class Post
      * @return array|false
      * @throws PDOException
      */
-    public static function getByUser($id)
+    public static function getByUser($id): array|false
     {
         $prepare = self::db()->dbh()
             ->prepare("select * from posts where user_id = ?");

@@ -1,22 +1,28 @@
 <?php
 
-function view($view, $atts = false)
+use App\Models\TwigInit;
+
+function view($view, $atts = []): void
 {
-    require_once ROOT . '/app/Views/' . $view . '.php';
+    $twig = TwigInit::getInstance();
+    $atts['message'] = getMessage();
+
+    echo $twig->env()->render($view . '.twig', $atts);
 }
 
-function setMessage($text)
+function setMessage($text = null): void
 {
-    $_SESSION['message'] .= $text . '<br>';
+    $_SESSION['message'] = $text . "\n";
 }
 
-function getMessage()
+function getMessage(): string
 {
-    echo $_SESSION['message'];
+    $message = $_SESSION['message'] ?? '';
     unset($_SESSION['message']);
+    return $message;
 }
 
-function setAuthSession($email)
+function setAuthSession($email): void
 {
     $_SESSION['email'] = $email;
 }
