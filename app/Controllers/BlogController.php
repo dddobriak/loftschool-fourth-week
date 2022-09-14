@@ -17,14 +17,14 @@ class BlogController
      */
     public function create()
     {
-        if (Auth::check($_SESSION)) {
-            $posts = Post::read();
-            $isAdmin = User::isAdmin();
-
-            return view('index', compact('posts', 'isAdmin'));
+        if (!Auth::check($_SESSION)) {
+            return header('Location: /auth');
         }
 
-        return header('Location: /auth');
+        $posts = Post::read();
+        $isAdmin = User::isAdmin();
+
+        return view('index', compact('posts', 'isAdmin'));
     }
 
     /**
@@ -35,6 +35,10 @@ class BlogController
      */
     public function addPost()
     {
+        if (!Auth::check($_SESSION)) {
+            return header('Location: /auth');
+        }
+
         if (!($_POST['title'] && $_POST['text'])) {
             setMessage('Some fields are empty');
 
