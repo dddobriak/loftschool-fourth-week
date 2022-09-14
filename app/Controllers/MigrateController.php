@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\Migrate;
+use App\Services\Migrate;
 
 class MigrateController
 {

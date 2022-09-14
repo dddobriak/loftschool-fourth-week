@@ -1,18 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Services;
+
+use App\Traits\DB;
 
 class Migrate
 {
-    /**
-     * Init db instance
-     *
-     * @return DbConnect
-     */
-    public static function db()
-    {
-        return DbConnect::getInstance();
-    }
+    use DB;
 
     public static function createUsersTable()
     {
